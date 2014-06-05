@@ -5,8 +5,30 @@
 	var socket = io.connect(window.location.origin);
 	var socketId = Math.random().toString().slice(2);
 	
-	console.log('View slide notes at ' + window.location.origin + '/notes/' + socketId);
-	window.open(window.location.origin + '/notes/' + socketId, 'notes-' + socketId);
+	// FIXME: Adding feedback from the slide notes window
+	socket.on('reveal', function(direction) {
+	    switch(direction) {
+	        case 'next':
+	            Reveal.next();
+	            break;
+	        case 'prev':
+	            Reveal.prev();
+	            break;
+	        case 'up':
+	            Reveal.up();
+	            break;
+	        case 'down':
+	            Reveal.down();
+	            break;
+	        default:
+	            break;
+	    }
+	});
+	
+	// FIXME: Path and leading / removed from notes -- Reason: follow path hierarchy.
+	var path = window.location.origin + window.location.pathname;
+	console.log('View slide notes at ' + path + 'notes/' + socketId);
+	window.open(path + 'notes/' + socketId, 'notes-' + socketId);
 
 	// Fires when a fragment is shown
 	Reveal.addEventListener( 'fragmentshown', function( event ) {

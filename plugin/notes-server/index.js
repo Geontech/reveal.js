@@ -21,10 +21,13 @@ io.sockets.on('connection', function(socket) {
 	socket.on('fragmentchanged', function(fragmentData) {
 		socket.broadcast.emit('fragmentdata', fragmentData);
 	});
+	socket.on('reveal', function(direction) {
+	    socket.broadcast.emit('reveal', direction);
+	});
 });
 
 app.configure(function() {
-	[ 'css', 'js', 'images', 'plugin', 'lib' ].forEach(function(dir) {
+	[ 'css', 'js', 'images', 'plugin', 'lib', 'presentations' ].forEach(function(dir) {
 		app.use('/' + dir, staticDir(opts.baseDir + dir));
 	});
 });
@@ -34,15 +37,17 @@ app.get("/", function(req, res) {
 	fs.createReadStream(opts.baseDir + '/index.html').pipe(res);
 });
 
-app.get("/notes/:socketId", function(req, res) {
-
+function notesRequest(req, res) {
 	fs.readFile(opts.baseDir + 'plugin/notes-server/notes.html', function(err, data) {
 		res.send(Mustache.to_html(data.toString(), {
 			socketId : req.params.socketId
 		}));
 	});
-	// fs.createReadStream(opts.baseDir + 'notes-server/notes.html').pipe(res);
-});
+	// fs.createReadStream(opts.baseDir + 'notes-server/notes.html').pipe(res); 
+
+};
+app.get("/notes/:socketId", notesRequest);
+app.get("/presentations/:presentation/notes/:socketId", notesRequest);
 
 // Actually listen
 app.listen(opts.port || null);

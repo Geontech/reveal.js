@@ -90,16 +90,24 @@
 	</head>
 
 	<body>
+        <div>
+		    <div id="wrap-current-slide" class="slides">
+			    <iframe src="../?receiver" width="1280" height="1024" id="current-slide"></iframe>
+		    </div>
 
-		<div id="wrap-current-slide" class="slides">
-			<iframe src="/?receiver" width="1280" height="1024" id="current-slide"></iframe>
+		    <div id="wrap-next-slide" class="slides">
+			    <iframe src="../?receiver" width="640" height="512" id="next-slide"></iframe>
+			    <span>UPCOMING:</span>
+		    </div>
+		    <div id="controls">
+		        <table style="margin-left:auto; margin-right: auto; text-align:center;">
+		            <tr><td></td><td><button onclick="socket.emit('reveal', 'up')">Up</button></td><td></td></tr>
+		            <tr><td><button onclick="socket.emit('reveal', 'prev')">Prev</button></td><td></td><td><button onclick="socket.emit('reveal', 'next')">Next</button></td></tr>
+		            <tr><td></td><td><button onclick="socket.emit('reveal', 'down')">Down</button></td><td></td></tr>
+		        </table>
+		    </div>
 		</div>
-
-		<div id="wrap-next-slide" class="slides">
-			<iframe src="/?receiver" width="640" height="512" id="next-slide"></iframe>
-			<span>UPCOMING:</span>
-		</div>
-		<div id="notes"></div>
+		<div id="notes" style="width: auto;"></div>
 
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/plugin/markdown/marked.js"></script>
